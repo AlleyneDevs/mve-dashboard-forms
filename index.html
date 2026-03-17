@@ -339,13 +339,14 @@ function refreshData(){
 function getFiltered(){
   return allRecords.filter(r=>(filterMes==='Todos'||r.mes===filterMes)&&(filterHosp==='Todos'||r.hospital===filterHosp));
 }
+function toN(v){const n=parseInt(String(v).trim());return isNaN(n)?0:n;}
 function calcStats(rows){
   return{
-    expuestos:   rows.reduce((s,r)=>s+(parseInt(r.exposed)||0),0),
-    oracion:     rows.reduce((s,r)=>s+(parseInt(r.oracion)||0),0),
-    reconciliados:rows.reduce((s,r)=>s+(parseInt(r.reconciliado)||0),0),
-    conectados:  rows.reduce((s,r)=>s+(parseInt(r.conectado)||0),0),
-    interesados: rows.reduce((s,r)=>s+(parseInt(r.interesado)||0),0)
+    expuestos:    rows.reduce((s,r)=>s+toN(r.exposed),0),
+    oracion:      rows.reduce((s,r)=>s+toN(r.oracion),0),
+    reconciliados:rows.reduce((s,r)=>s+toN(r.reconciliado),0),
+    conectados:   rows.reduce((s,r)=>s+toN(r.conectado),0),
+    interesados:  rows.reduce((s,r)=>s+toN(r.interesado),0)
   };
 }
 function groupBy(arr,key){return arr.reduce((a,i)=>{const k=i[key]||'Sin datos';a[k]=a[k]||[];a[k].push(i);return a;},{});}
@@ -526,11 +527,11 @@ function renderChart(records){
       interesados:  {t:'Interesados',        f:'No interesados',   key:'interesado'}
     };
     const m=MAP[activeCard];
-    const yes=records.reduce((s,r)=>s+(parseInt(r[m.key])||0),0);
-    const totalExp=records.reduce((s,r)=>s+(parseInt(r.exposed)||0),0);
+    const yes=records.reduce((s,r)=>s+(toN(r[m.key])),0);
+    const totalExp=records.reduce((s,r)=>s+(toN(r.exposed)),0);
     const noVal=Math.max(0,totalExp-yes);
-    const yesRecords=records.filter(r=>(parseInt(r[m.key])||0)>0);
-    const noRecords=records.filter(r=>(parseInt(r[m.key])||0)===0);
+    const yesRecords=records.filter(r=>(toN(r[m.key]))>0);
+    const noRecords=records.filter(r=>(toN(r[m.key]))===0);
     activeChart=new Chart(ctx,{type:'doughnut',data:{labels:[m.t,m.f],datasets:[{data:[yes,noVal],backgroundColor:[meta.color,C.dim],borderWidth:0}]},options:{...chartOpts,cutout:'55%',onClick:(e,els)=>{
       if(els.length){const idx=els[0].index;const grupo=idx===0?yesRecords:noRecords;const label=idx===0?m.t:m.f;renderPieDetail(grupo,activeCard,label);}
     }}});
@@ -571,7 +572,7 @@ function renderLiderDetail(records, lider){
 
 // ── TABLE ─────────────────────────────────────────────────────────────────────
 function renderTable(records){
-  const interesados=records.filter(r=>(parseInt(r.interesado)||0)>0);
+  const interesados=records.filter(r=>(toN(r.interesado))>0);
   const sec=document.getElementById('table-section');
   if(!interesados.length){sec.style.display='none';return;}
   sec.style.display='block';
