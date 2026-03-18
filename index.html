@@ -572,6 +572,47 @@ function renderLiderDetail(records, lider){
     {label:'Interesados',val:s.interesados,color:C.orange2},
   ];
 
+  // Tabla de personas del obrero
+  const personasHTML = rows.length ? `
+    <div style="margin-top:18px;">
+      <div style="font-size:11px;font-weight:700;color:#6b8cae;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">
+        👥 Personas registradas — ${rows.length} contacto${rows.length!==1?'s':''}
+      </div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="border-bottom:1px solid #1e3a5f;">
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">Nombre</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">Celular</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">Sector</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">Mes</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">🙏 Oración</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">💛 Recon.</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">🏠 CM</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">📲 Interés</th>
+              <th style="text-align:left;padding:5px 8px;color:#6b8cae;font-weight:600;white-space:nowrap;">Hospital</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r=>`
+              <tr style="border-bottom:1px solid #2a3f5c;">
+                <td style="padding:6px 8px;color:#f0f6ff;font-weight:600;">${r.nombre||'—'}</td>
+                <td style="padding:6px 8px;color:#6b8cae;">${r.celular||'—'}</td>
+                <td style="padding:6px 8px;color:#6b8cae;">${r.sector||'—'}</td>
+                <td style="padding:6px 8px;color:#6b8cae;">${r.mes||'—'}</td>
+                <td style="padding:6px 8px;text-align:center;color:${toN(r.oracion)?C.green:'#2a3f5c'};">${toN(r.oracion)?'✓ '+r.oracion:'—'}</td>
+                <td style="padding:6px 8px;text-align:center;color:${toN(r.reconciliado)?C.gold:'#2a3f5c'};">${toN(r.reconciliado)?'✓ '+r.reconciliado:'—'}</td>
+                <td style="padding:6px 8px;text-align:center;color:${toN(r.conectado)?C.teal:'#2a3f5c'};">${toN(r.conectado)?'✓ '+r.conectado:'—'}</td>
+                <td style="padding:6px 8px;text-align:center;color:${toN(r.interesado)?C.orange2:'#2a3f5c'};">${toN(r.interesado)?'✓ '+r.interesado:'—'}</td>
+                <td style="padding:6px 8px;color:#6b8cae;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.hospital||'—'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  ` : '';
+
   container.innerHTML=`
     <div class="lider-detail" style="border:1px solid ${C.blue}44">
       <div class="lider-detail-header">
@@ -579,13 +620,19 @@ function renderLiderDetail(records, lider){
         <button onclick="selectedLider=null;document.getElementById('lider-detail-container').innerHTML=''">✕ cerrar</button>
       </div>
       <div class="lider-stats">
-        ${[{l:'Expuestos',v:s.expuestos,c:C.blue},{l:'Oración de Fe',v:s.oracion,c:C.green},{l:'Reconciliados',v:s.reconciliados,c:C.gold},{l:'Conectados CM',v:s.conectados,c:C.teal},{l:'Interesados',v:s.interesados,c:C.orange2}]
-          .map(x=>`<div class="lider-stat" style="border:1px solid ${x.c}44"><div class="stat-val" style="color:${x.c}">${x.v}</div><div class="stat-lbl">${x.l}</div></div>`).join('')}
+        ${[
+          {l:'Expuestos',v:s.expuestos,c:C.blue},
+          {l:'Oración de Fe',v:s.oracion,c:C.green},
+          {l:'Reconciliados',v:s.reconciliados,c:C.gold},
+          {l:'Conectados CM',v:s.conectados,c:C.teal},
+          {l:'Interesados',v:s.interesados,c:C.orange2}
+        ].map(x=>`<div class="lider-stat" style="border:1px solid ${x.c}44"><div class="stat-val" style="color:${x.c}">${x.v}</div><div class="stat-lbl">${x.l}</div></div>`).join('')}
       </div>
       ${bars.map(b=>{
         const pct=s.expuestos>0?Math.round((b.val/s.expuestos)*100):0;
         return`<div class="prog-row"><div class="prog-label"><span>${b.label}</span><span style="color:${b.color}">${pct}% de expuestos</span></div><div class="prog-bar-bg"><div class="prog-bar" style="width:${pct}%;background:${b.color}"></div></div></div>`;
       }).join('')}
+      ${personasHTML}
     </div>
   `;
 }
