@@ -415,7 +415,7 @@ function renderCards(records){
   const totalMat=Object.values(matCounts).reduce((s,v)=>s+v,0);
 
   const CARDS=[
-    {id:'lideres',icon:'🫂',label:'Líderes Activos',value:lideres,sub:'en este período',color:C.blue},
+    {id:'lideres',icon:'🫂',label:'Obreros Activos',value:lideres,sub:'en este período',color:C.blue},
     {id:'tendencia',icon:'✝️',label:'Expuestos al Evangelio',value:stats.expuestos,sub:'personas alcanzadas',color:C.gold},
     {id:'oracion',icon:'🙏',label:'Oración de Fe',value:stats.oracion,sub:'de '+records.length+' contactos',color:C.purple},
     {id:'reconciliados',icon:'💛',label:'Reconciliados',value:stats.reconciliados,sub:'retorno a la fe',color:C.rose},
@@ -455,7 +455,7 @@ function renderChart(records){
   if(!activeCard){container.innerHTML='';activeChart=null;return;}
 
   const CARD_META={
-    lideres:{icon:'🫂',title:'Actividad por Líder',color:C.blue},
+    lideres:{icon:'🫂',title:'Actividad por Obrero',color:C.blue},
     tendencia:{icon:'✝️',title:'Tendencia Mensual',color:C.gold},
     oracion:{icon:'🙏',title:'Oración de Fe',color:C.purple},
     reconciliados:{icon:'💛',title:'Reconciliados',color:C.rose},
@@ -472,7 +472,7 @@ function renderChart(records){
         <span class="panel-icon">${meta.icon}</span>
         <span class="panel-title" style="color:${meta.color}">${meta.title}</span>
       </div>
-      ${activeCard==='lideres'?'<div class="panel-hint">Haz click en una barra para ver el detalle de ese líder</div>':''}
+      ${activeCard==='lideres'?'<div class="panel-hint">Haz click en una barra para ver el detalle de ese obrero</div>':''}
       ${['oracion','reconciliados','conectados','interesados','sectores'].includes(activeCard)?'<div class="panel-hint">Haz click en un segmento para ver las personas</div>':''}
       <div class="chart-wrap"><canvas id="main-chart"></canvas></div>
       <div id="lider-detail-container"></div>
